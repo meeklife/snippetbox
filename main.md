@@ -223,3 +223,52 @@ There are two big benefits for using this structure:
 
 So now our web application consists of multiple Go source code files under the cmd/web directory. To run these, we can use the go run command like so:
 `go run ./cmd/web`
+
+# HTML Templating and Inheritance
+
+We will inject a bit of life into the project and develop a proper home page for our Snippetbox web application. Over the next couple of chapters we’ll work towards creating a page.
+To do this, we will first create a new template file in the ui/html directory
+`touch ui/hmtl/home.page.tmpl`
+Then write our markup in the file for our homepage
+
+So now that we’ve created a template file with the HTML markup for the home page, the next question is how do we get our home handler to render it?
+For this we need to import Go’s html/template package, which provides a family of functions for safely parsing and rendering HTML templates. We can use the functions in this package to parse the template file and then execute the template.
+
+Therefore in the handlers.go we will add these to the homepage handler;
+
+```go
+// Use the template.ParseFiles() function to read the template file into a
+// template set. If there's an error, we log the detailed error message and use
+// the http.Error() function to send a generic 500 Internal Server Error
+// response to the user.
+ts, err := template.ParseFiles("ui/html/home.page.tmpl")
+if err != nil {
+	log.Println(err.Error())
+	http.Error(w, "Invalid Server Error", 500)
+	return
+}
+// We then use the Execute() method on the template set to write the template
+// content as the response body. The last parameter to Execute() represents any
+// dynamic data that we want to pass in, which for now we'll leave as nil.
+err = ts.Execute(w, nil)
+if err != nil {
+	log.Println(err.Error())
+	http.Error(w, "Invalid Server Error", 500)
+}
+```
+
+We can add partials to the template, which we need to render it as well.
+So we need to update the code in the home handler to parse both templates.
+
+```go
+// Initialize a slice containing the paths to the two files. Note that the
+// home.page.tmpl file must be the *first* file in the slice.
+files := []string{
+		"./ui/html/home.page.tmpl",
+		"./ui/html/base.layout.tmpl",
+}
+// Use the template.ParseFiles() function to read the files and store the
+// templates in a template set. Notice that we can pass the slice of file paths
+// as a variadic parameter?
+ts, err := template.ParseFiles(files...)
+```
