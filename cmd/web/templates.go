@@ -2,10 +2,10 @@ package main
 
 import (
 	"html/template"
-	"net/url"
 	"path/filepath"
 	"time"
 
+	"meeklife.net/snippetbox/pkg/forms"
 	"meeklife.net/snippetbox/pkg/models"
 )
 
@@ -13,8 +13,9 @@ type templateData struct {
 	Snippet     *models.Snippet
 	Snippets    []*models.Snippet
 	CurrentYear int
-	FormData    url.Values
-	FormErrors  map[string]string
+	Form        *forms.Form
+	// FormData    url.Values
+	// FormErrors  map[string]string
 }
 
 func humanDate(t time.Time) string {
