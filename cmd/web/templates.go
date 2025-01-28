@@ -10,6 +10,7 @@ import (
 )
 
 type templateData struct {
+	CSRFToken       string
 	Snippet         *models.Snippet
 	Snippets        []*models.Snippet
 	CurrentYear     int
