@@ -117,6 +117,7 @@ func (app *application) signUser(w http.ResponseWriter, r *http.Request) {
 	app.session.Put(r, "flash", "Your Signup was successful. Please log in")
 
 	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+	// http.Redirect(w, r, "/user/login", http.StatusOK)
 }
 
 func (app *application) loginUserForm(w http.ResponseWriter, r *http.Request) {
@@ -152,4 +153,8 @@ func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
 	app.session.Put(r, "flash", "User logged out successfully")
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func ping(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("OK"))
 }
