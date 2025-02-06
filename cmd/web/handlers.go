@@ -23,6 +23,11 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (app *application) about(w http.ResponseWriter, r *http.Request) {
+	app.render(w, r, "about.page.tmpl", nil)
+	// fmt.Println("Welcome to about page")
+}
+
 func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get(":id"))
 	if err != nil || id < 1 {
