@@ -62,7 +62,7 @@ func (m *UserModel) Authenticate(email, password string) (int, error) {
 		}
 	}
 
-	return 0, nil
+	return id, nil
 }
 
 func (m *UserModel) Get(id int) (*models.User, error) {

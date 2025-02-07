@@ -152,6 +152,20 @@ func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
+func (app *application) userProfile(w http.ResponseWriter, r *http.Request) {
+	userId := app.session.GetInt(r, "authenticatedUserID")
+
+	user, err := app.users.Get(userId)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	app.render(w, r, "user.page.tmpl", &templateData{
+		User: user,
+	})
+}
+
 func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
 	app.session.Remove(r, "authenticatedUserID")
 
