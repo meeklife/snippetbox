@@ -148,6 +148,13 @@ func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.session.Put(r, "authenticatedUserID", id)
+
+	path := app.session.PopString(r, "redirectedPathAfterLogin")
+	if path != "" {
+		http.Redirect(w, r, path, http.StatusSeeOther)
+		return
+	}
+
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
