@@ -17,13 +17,12 @@ import (
 )
 
 type application struct {
-	errorLog *log.Logger
-	infoLog  *log.Logger
-	// snippets      *mysql.SnippetModel
+	errorLog      *log.Logger
+	infoLog       *log.Logger
+	debug         bool
 	templateCache map[string]*template.Template
 	session       *sessions.Session
-	// users         *mysql.UserModel
-	snippets interface {
+	snippets      interface {
 		Insert(string, string, string) (int, error)
 		Get(int) (*models.Snippet, error)
 		Latest() ([]*models.Snippet, error)
@@ -40,6 +39,7 @@ func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	dsn := flag.String("dsn", "web:Systemmind1234@/snippetbox?parseTime=true", "MySQL data source name")
 	secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge", "secret-key")
+	debug := flag.Bool("debug", false, "debug mode for output")
 	flag.Parse()
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
@@ -65,6 +65,7 @@ func main() {
 	app := &application{
 		errorLog:      errorLog,
 		infoLog:       infoLog,
+		debug:         *debug,
 		snippets:      &mysql.SnippetModel{DB: db},
 		templateCache: templateCache,
 		session:       session,
